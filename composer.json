@@ -1,9 +1,9 @@
 {
-    "name": "pmvc-plugin/cache-header",
-    "description": "A library help you setup http cache-header",
+    "name": "pmvc-plugin/cache_header",
+    "description": "A library help you setup http cache header",
     "type": "library",
-    "homepage": "https://github.com/pmvc-plugin/cache-header",
-    "keywords": ["browser", "cache", "header", "pmvc", "plug", "plug-in"],
+    "homepage": "https://github.com/pmvc-plugin/cache_header",
+    "keywords": ["browser", "cache", "header", "pmvc", "plug-in"],
     "license": "MIT",
     "authors": [
         {
@@ -11,5 +11,8 @@
             "email": "hill@kimo.com"
         }
     ],
+    "require": {
+        "pmvc/pmvc": "*"
+    },
     "minimum-stability": "dev"
 }
