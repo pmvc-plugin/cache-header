@@ -1,4 +1,5 @@
 <?php
+namespace PMVC\PlugIn\cache_header;
 class CacheHeaderHelper {
 
     /** 

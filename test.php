@@ -8,6 +8,12 @@ use PHPUnit_Framework_TestCase;
 class CacheHeaderTest extends PHPUnit_Framework_TestCase
 {
     private $_plug = 'cache_header'; 
+
+    function teardown()
+    {
+        \PMVC\unplug($this->_plug);
+    }
+
     function testGetCacheHeader()
     {
         $headers = \PMVC\plug($this->_plug)->getCacheHeader(0);
@@ -15,27 +21,23 @@ class CacheHeaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$headers[0]);
     }
 
-    function testOnBrProcessView()
+    function testSetHeader()
     {
         $now = time();
-        $view = \PMVC\plug('view',[
-            _CLASS=>__NAMESPACE__.'\fakePlugIn'
-        ]);
-        \PMVC\plug('view_html',[
+        \PMVC\option('set', _ROUTER, 'fake_router');
+        $router = \PMVC\plug('fake_router',[
             _CLASS=>__NAMESPACE__.'\fakePlugIn'
         ]);
         $pCache = \PMVC\plug($this->_plug,[
             [10, 'public', $now]
         ]); 
-        \PMVC\option('set',_VIEW_ENGINE,'html');
-        $pCache->onB4ProcessView(new fakeSubject());
 
         $expected = [
             'Cache-Control: max-age=10, public',
             'Last-Modified: '. $pCache->getGmt($now),
             'Expires: '. $pCache->getGmt($now+10)
         ];
-        $this->assertEquals($expected, $view['headers']);
+        $this->assertEquals($expected, $router['headers']);
     }
 }
 
@@ -45,11 +47,10 @@ class fakePlugIn extends \PMVC\PlugIn
     {
         $this['headers'] = [];
     }
-}
 
-class fakeSubject {
-    function detach()
+    function processHeader($h)
     {
-
+        $this['headers'] = $h;
     }
 }
+
