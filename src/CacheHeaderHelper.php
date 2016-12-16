@@ -13,13 +13,16 @@ class CacheHeaderHelper {
     /**
      * get cache header
      */
-     function getCacheHeader($timestamp,$type='private',$modificationTimestamp=true){
-        $headers = array();
+     function getCacheHeader($timestamp, $type=null, $modificationTimestamp=true){
+        $headers = [];
+        if (is_null($type)) {
+            $type = 'public';
+        }
         if($timestamp){
             $headers[]='Cache-Control: max-age='.$timestamp.', '.$type;
             if ($modificationTimestamp) {
                 if (!is_numeric($modificationTimestamp)) {
-                    $modificationTimestamp = time();
+                    $modificationTimestamp = time() - 86400;
                 }
                 $modificationGmt =self::getGmt($modificationTimestamp);
                 $headers[]='Last-Modified: '.$modificationGmt;
