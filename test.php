@@ -14,11 +14,29 @@ class CacheHeaderTest extends PHPUnit_Framework_TestCase
         \PMVC\unplug($this->_plug);
     }
 
-    function testGetCacheHeader()
+    function testGetNoCacheHeader()
     {
         $headers = \PMVC\plug($this->_plug)->getCacheHeader(0);
-        $expected = 'Cache-Control: no-store, no-cache, must-revalidate';
-        $this->assertEquals($expected,$headers[0]);
+        $expected = [
+            'Cache-Control: no-store, no-cache, must-revalidate',
+            'Expires: Thu, 01 Jan 1970 00:00:00 GMT'
+        ];
+        $this->assertEquals($expected,$headers);
+    }
+
+    function testGetCacheHeader()
+    {
+        $plug = \PMVC\plug($this->_plug);
+        $now = time();
+        $headers = $plug->getCacheHeader(1, null, true, $now);
+        $modify = $plug->getGmt($now - 86400);
+        $expire = $plug->getGmt($now + 1);
+        $expected = [
+            'Cache-Control: max-age=1, public',
+            'Last-Modified: '.$modify,
+            'Expires: '. $expire
+        ];
+        $this->assertEquals($expected,$headers);
     }
 
     function testSetHeader()

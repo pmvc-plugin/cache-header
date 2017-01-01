@@ -13,25 +13,29 @@ class CacheHeaderHelper {
     /**
      * get cache header
      */
-     function getCacheHeader($timestamp, $type=null, $modificationTimestamp=true){
+     function getCacheHeader($timestamp, $type=null, $modificationTimestamp=true, $now=null){
         $headers = [];
         if (is_null($type)) {
             $type = 'public';
+        }
+        if (is_null($now)) {
+            $now = time();
         }
         if($timestamp){
             $headers[]='Cache-Control: max-age='.$timestamp.', '.$type;
             if ($modificationTimestamp) {
                 if (!is_numeric($modificationTimestamp)) {
-                    $modificationTimestamp = time() - 86400;
+                    $modificationTimestamp = $now - 86400;
                 }
                 $modificationGmt =self::getGmt($modificationTimestamp);
                 $headers[]='Last-Modified: '.$modificationGmt;
             }
+            $expireGmt = self::getGmt($now+$timestamp);
         }else{
             $headers[]='Cache-Control: no-store, no-cache, must-revalidate';
+            $expireGmt = self::getGmt(0);
         }
-        $cacheGmt = self::getGmt(time()+$timestamp);
-        $headers[]='Expires: '.$cacheGmt;
+        $headers[]='Expires: '.$expireGmt;
         return $headers;
      }
 
