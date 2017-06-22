@@ -1,4 +1,5 @@
 <?php
+
 namespace PMVC\PlugIn\cache_header;
 
 use PMVC\Event;
@@ -24,9 +25,6 @@ class cache_header extends \PMVC\PlugIn
 
     public function onMapRequest($subject = null)
     {
-        if ($subject) {
-            $subject->detach($this);
-        }
         if (is_array($this[0])) {
             \PMVC\callPlugin(
                 \PMVC\getOption(_ROUTER),
