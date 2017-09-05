@@ -15,15 +15,15 @@ class cache_header extends \PMVC\PlugIn
         $this->setDefaultAlias(new CacheHeaderHelper());
         \PMVC\callPlugin(
             'dispatcher',
-            'attachAfter',
+            'attach',
             [ 
                 $this,
-                Event\MAP_REQUEST,
+                Event\B4_PROCESS_ACTION,
             ]
         );
     }
 
-    public function onMapRequest($subject = null)
+    public function onB4ProcessAction($subject = null)
     {
         if (is_array($this[0])) {
             \PMVC\callPlugin(

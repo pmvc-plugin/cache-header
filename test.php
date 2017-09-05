@@ -49,7 +49,7 @@ class CacheHeaderTest extends PHPUnit_Framework_TestCase
         $pCache = \PMVC\plug($this->_plug,[
             [10, null, $now]
         ]); 
-        $pCache->onMapRequest();
+        $pCache->onB4ProcessAction();
 
         $expected = [
             'Cache-Control: max-age=10, public',
