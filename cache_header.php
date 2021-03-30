@@ -18,12 +18,12 @@ class cache_header extends \PMVC\PlugIn
             'attach',
             [ 
                 $this,
-                Event\B4_PROCESS_ACTION,
+                Event\WILL_PROCESS_ACTION,
             ]
         );
     }
 
-    public function onB4ProcessAction($subject = null)
+    public function onWillProcessAction($subject = null)
     {
         if (is_array($this[0])) {
             \PMVC\callPlugin(
